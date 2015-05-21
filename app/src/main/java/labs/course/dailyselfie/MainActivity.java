@@ -1,17 +1,25 @@
 package labs.course.dailyselfie;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends ListActivity {
+
+    private PhotoListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Kamilx
+
+        ListView photosListView = getListView();
+
+        mAdapter = new PhotoListAdapter(getApplicationContext());
+        setListAdapter(mAdapter);
     }
 
     @Override
