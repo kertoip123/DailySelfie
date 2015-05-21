@@ -52,7 +52,8 @@ public class PhotoListAdapter extends BaseAdapter  {
             holder = (ViewHolder) newView.getTag();
         }
 
-        holder.photo.setImageBitmap(curr.getBitmap());
+        //holder.photo.setImageBitmap(curr.getBitmap());
+        curr.setPic(holder.photo);
         holder.name.setText(curr.getName());
 
         return newView;
