@@ -24,6 +24,10 @@ public class PhotoRecord {
         this.storageDir = storageDir;
     }
 
+    public PhotoRecord(String mCurrentPhotoPath) {
+        this.mCurrentPhotoPath = mCurrentPhotoPath;
+    }
+
     public void setName (String name){
         this.mName = name;
     }
@@ -35,6 +39,11 @@ public class PhotoRecord {
     public String getName(){
         return this.mName;
     }
+
+    public String getCurrentPhotoPath(){
+        return this.mCurrentPhotoPath;
+    }
+
 
     public Bitmap getBitmap(){
         return this.mBitmap;

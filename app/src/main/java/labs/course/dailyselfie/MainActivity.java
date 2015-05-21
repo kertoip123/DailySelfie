@@ -2,19 +2,23 @@ package labs.course.dailyselfie;
 
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 public class MainActivity extends ListActivity {
 
     private PhotoListAdapter mAdapter;
 
+    final public String pathAttribute = "final_path";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
+        //setContentView(R.layout.image_activity);
 
         ListView photosListView = getListView();
 
@@ -42,5 +46,15 @@ public class MainActivity extends ListActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        // @TODO Photo needs to be enlarged after clicking on the List Item
+        PhotoRecord clickedPhoto = (PhotoRecord) getListAdapter().getItem(position);
+        Bundle newBundle = new Bundle();
+        newBundle.putString(pathAttribute, clickedPhoto.getCurrentPhotoPath());
+        Intent intent = new Intent(MainActivity.this, ImageActivity.class);
+        startActivity(intent, newBundle);
     }
 }
