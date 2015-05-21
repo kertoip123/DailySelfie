@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 public class PhotoListAdapter extends BaseAdapter  {
 
-    private ArrayList<PlaceRecord> list = new ArrayList<PlaceRecord>();
+    private ArrayList<PhotoRecord> list = new ArrayList<PhotoRecord>();
     private static LayoutInflater inflater = null;
     private Context mContext;
 
@@ -38,22 +38,22 @@ public class PhotoListAdapter extends BaseAdapter  {
         View newView = convertView;
         ViewHolder holder;
 
-        PlaceRecord curr = list.get(position);
+        PhotoRecord curr = list.get(position);
 
         if (null == convertView) {
             holder = new ViewHolder();
             newView = inflater
-                    .inflate(R.layout.place_badge_view, parent, false);
-            holder.photo = (ImageView) newView.findViewById(R.id.flag);
-            holder.name = (TextView) newView.findViewById(R.id.place_name);
+                    .inflate(R.layout.my_selfie_view, parent, false);
+            holder.photo = (ImageView) newView.findViewById(R.id.my_selfie);
+            holder.name = (TextView) newView.findViewById(R.id.name);
             newView.setTag(holder);
 
         } else {
             holder = (ViewHolder) newView.getTag();
         }
 
-        holder.photo.setImageBitmap(curr.getFlagBitmap());
-        holder.name.setText("Place: " + curr.getPlace());
+        holder.photo.setImageBitmap(curr.getBitmap());
+        holder.name.setText(curr.getName());
 
         return newView;
     }
@@ -65,12 +65,12 @@ public class PhotoListAdapter extends BaseAdapter  {
 
     }
 
-    public void add(PlaceRecord listItem) {
+    public void add(PhotoRecord listItem) {
         list.add(listItem);
         notifyDataSetChanged();
     }
 
-    public ArrayList<PlaceRecord> getList() {
+    public ArrayList<PhotoRecord> getList() {
         return list;
     }
 
