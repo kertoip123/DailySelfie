@@ -3,17 +3,28 @@ package labs.course.dailyselfie;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
+import java.io.File;
+import java.io.IOException;
+
 public class MainActivity extends ListActivity {
 
     private PhotoListAdapter mAdapter;
+    private PhotoRecord currPhotoRecord;
 
-    final public String pathAttribute = "final_path";
+    static final  String TAG = "Lab-DailySelfie";
+    static final  String pathAttribute = "final_path";
+    static final int REQUEST_TAKE_PHOTO = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,5 +67,44 @@ public class MainActivity extends ListActivity {
         newBundle.putString(pathAttribute, clickedPhoto.getCurrentPhotoPath());
         Intent intent = new Intent(MainActivity.this, ImageActivity.class);
         startActivity(intent, newBundle);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == REQUEST_TAKE_PHOTO) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // The user picked a contact.
+                // The Intent's data Uri identifies which contact was selected.
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                currPhotoRecord.setBitmap(imageBitmap);
+                mAdapter.add(currPhotoRecord);
+                // Do something with the contact here (bigger example below)
+            }
+        }
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                currPhotoRecord = new PhotoRecord(getExternalFilesDir(null));
+                photoFile = currPhotoRecord.createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                Log.e(TAG, "createImageFile() failed !!!");
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
     }
 }

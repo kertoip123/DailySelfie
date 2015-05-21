@@ -9,8 +9,6 @@ import android.widget.ImageView;
  */
 public class ImageActivity extends Activity {
 
-    final public String pathAttribute = "final_path";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,7 +17,7 @@ public class ImageActivity extends Activity {
         ImageView imageView = (ImageView) findViewById(R.id.enlarged_selfie);
 
         //@TODO Passing Photo record from MainActivity
-        String photoCurrentPath = savedInstanceState.getString(pathAttribute);
+        String photoCurrentPath = savedInstanceState.getString(MainActivity.pathAttribute);
         PhotoRecord photoRecord = new PhotoRecord(photoCurrentPath);
         photoRecord.setPic(imageView);
     }
