@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -60,7 +61,7 @@ public class MainActivity extends ListActivity {
         mNotificationReceiverPendingIntent = PendingIntent.getBroadcast(
                 MainActivity.this, 0, mNotificationReceiverIntent, 0);
         mAlarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME,
-                SystemClock.elapsedRealtime()+INITIAL_ALARM_DELAY,
+                SystemClock.elapsedRealtime() + INITIAL_ALARM_DELAY,
                 ALARM_DELAY,
                 mNotificationReceiverPendingIntent);
     }
@@ -122,7 +123,9 @@ public class MainActivity extends ListActivity {
             // Create the File where the photo should go
             File photoFile = null;
             try {
-                PhotoRecord currPhotoRecord = new PhotoRecord(getExternalFilesDir(null));
+                //PhotoRecord currPhotoRecord = new PhotoRecord(getExternalFilesDir(null));
+                PhotoRecord currPhotoRecord = new PhotoRecord(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
+                Log.e(TAG, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString());
                 photoFile = currPhotoRecord.createImageFile();
 
                 editor.putString(nameAttribute, currPhotoRecord.getName());
