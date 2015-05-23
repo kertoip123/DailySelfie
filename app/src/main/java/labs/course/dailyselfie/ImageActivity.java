@@ -1,7 +1,9 @@
 package labs.course.dailyselfie;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.ImageView;
 
 /**
@@ -17,8 +19,19 @@ public class ImageActivity extends Activity {
         ImageView imageView = (ImageView) findViewById(R.id.enlarged_selfie);
 
         //@TODO Passing Photo record from MainActivity
-        String photoCurrentPath = savedInstanceState.getString(MainActivity.pathAttribute);
+        Intent intent = getIntent();
+        String photoCurrentPath = intent.getExtras().getString(MainActivity.pathAttribute);
         PhotoRecord photoRecord = new PhotoRecord(photoCurrentPath);
         photoRecord.setPic(imageView);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

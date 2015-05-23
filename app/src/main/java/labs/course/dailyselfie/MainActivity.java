@@ -93,10 +93,9 @@ public class MainActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         // @TODO Photo needs to be enlarged after clicking on the List Item
         PhotoRecord clickedPhoto = (PhotoRecord) getListAdapter().getItem(position);
-        Bundle newBundle = new Bundle();
-        newBundle.putString(pathAttribute, clickedPhoto.getCurrentPhotoPath());
         Intent intent = new Intent(MainActivity.this, ImageActivity.class);
-        startActivity(intent, newBundle);
+        intent.putExtra(pathAttribute, clickedPhoto.getCurrentPhotoPath());
+        startActivity(intent);
     }
 
     @Override
