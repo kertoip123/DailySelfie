@@ -2,12 +2,15 @@ package labs.course.dailyselfie;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -60,7 +63,8 @@ public class PhotoRecord {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         mName = "JPEG_" + timeStamp + "_";
-        //File storageDir = getExternalFilesDir(null);
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
         File image = File.createTempFile(
                 mName,  /* prefix */
                 ".jpg",         /* suffix */
@@ -80,8 +84,10 @@ public class PhotoRecord {
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
-        try{
-            Bitmap tempBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        try ( InputStream is = new URL( mCurrentPhotoPath ).openStream() ) {
+            Bitmap bitmap = BitmapFactory.decodeStream( is );
+            //Bitmap tempBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+            Bitmap tempBitmap  = BitmapFactory.decodeStream( is, null, bmOptions);
         }
         catch(Exception e){
             Log.e(MainActivity.TAG, "setPic() Exception !");
@@ -97,8 +103,14 @@ public class PhotoRecord {
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
 
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        mImageView.setImageBitmap(bitmap);
+        try ( InputStream is = new URL( mCurrentPhotoPath ).openStream() ) {
+            //Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+            Bitmap bitmap  = BitmapFactory.decodeStream( is, null, bmOptions);
+            mImageView.setImageBitmap(bitmap);
+        }
+        catch(Exception e){
+            Log.e(MainActivity.TAG, "setPic() Exception !");
+        }
     }
 
     @Override
