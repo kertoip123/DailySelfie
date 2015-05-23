@@ -52,8 +52,8 @@ public class MainActivity extends ListActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_camera) {
+            dispatchTakePictureIntent();
         }
 
         return super.onOptionsItemSelected(item);
@@ -77,9 +77,9 @@ public class MainActivity extends ListActivity {
             if (resultCode == RESULT_OK) {
                 // The user picked a contact.
                 // The Intent's data Uri identifies which contact was selected.
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                currPhotoRecord.setBitmap(imageBitmap);
+             //   Bundle extras = data.getExtras();
+               // Bitmap imageBitmap = (Bitmap) extras.get("data");
+                //currPhotoRecord.setBitmap(imageBitmap);
                 mAdapter.add(currPhotoRecord);
                 // Do something with the contact here (bigger example below)
             }
