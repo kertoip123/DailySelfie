@@ -27,7 +27,7 @@
         </activity>
         <activity
             android:name=".ImageActivity"
-            android:label="Img Activity" >
+            android:label="ImageActivity" >
         </activity>
         <receiver android:name=".AlarmNotificationReceiver" >
         </receiver>
