@@ -2,9 +2,11 @@ package labs.course.dailyselfie;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,6 +27,11 @@ public class PhotoRecord {
     }
 
     public PhotoRecord(String mCurrentPhotoPath) {
+        this.mCurrentPhotoPath = mCurrentPhotoPath;
+    }
+
+    public PhotoRecord(String mName, String mCurrentPhotoPath) {
+        this.mName = mName;
         this.mCurrentPhotoPath = mCurrentPhotoPath;
     }
 
@@ -73,7 +80,12 @@ public class PhotoRecord {
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        try{
+            Bitmap tempBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        }
+        catch(Exception e){
+            Log.e(MainActivity.TAG, "setPic() Exception !");
+        }
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
 
