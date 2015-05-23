@@ -3,6 +3,7 @@ package labs.course.dailyselfie;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,10 +20,13 @@ import java.io.IOException;
 public class MainActivity extends ListActivity {
 
     private PhotoListAdapter mAdapter;
-    private PhotoRecord currPhotoRecord;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    //private PhotoRecord currPhotoRecord;
 
     static final  String TAG = "Lab-DailySelfie";
     static final  String pathAttribute = "final_path";
+    static final  String nameAttribute = "curr_name";
     static final int REQUEST_TAKE_PHOTO = 1;
 
 
@@ -32,6 +36,9 @@ public class MainActivity extends ListActivity {
         //setContentView(R.layout.image_activity);
 
         ListView photosListView = getListView();
+
+        sharedPreferences = getPreferences(MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
         mAdapter = new PhotoListAdapter(getApplicationContext());
         setListAdapter(mAdapter);
@@ -54,6 +61,7 @@ public class MainActivity extends ListActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_camera) {
             dispatchTakePictureIntent();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -77,9 +85,9 @@ public class MainActivity extends ListActivity {
             if (resultCode == RESULT_OK) {
                 // The user picked a contact.
                 // The Intent's data Uri identifies which contact was selected.
-             //   Bundle extras = data.getExtras();
-               // Bitmap imageBitmap = (Bitmap) extras.get("data");
-                //currPhotoRecord.setBitmap(imageBitmap);
+                String mName = sharedPreferences.getString(nameAttribute, "No such items");
+                String mCurrentPhotoPath = sharedPreferences.getString(pathAttribute, "No such items");
+                PhotoRecord currPhotoRecord = new PhotoRecord(mName, mCurrentPhotoPath);
                 mAdapter.add(currPhotoRecord);
                 // Do something with the contact here (bigger example below)
             }
@@ -93,8 +101,14 @@ public class MainActivity extends ListActivity {
             // Create the File where the photo should go
             File photoFile = null;
             try {
-                currPhotoRecord = new PhotoRecord(getExternalFilesDir(null));
+                PhotoRecord currPhotoRecord = new PhotoRecord(getExternalFilesDir(null));
                 photoFile = currPhotoRecord.createImageFile();
+
+                editor.putString(nameAttribute, currPhotoRecord.getName());
+                editor.putString(pathAttribute, currPhotoRecord.getCurrentPhotoPath());
+
+                editor.commit();
+
             } catch (IOException ex) {
                 // Error occurred while creating the File
                 Log.e(TAG, "createImageFile() failed !!!");
