@@ -30,8 +30,8 @@ public class MainActivity extends ListActivity {
     private AlarmManager mAlarmManager;
     private Intent mNotificationReceiverIntent;
     private PendingIntent mNotificationReceiverPendingIntent;
-    private static final long INITIAL_ALARM_DELAY = AlarmManager.INTERVAL_DAY;
-    private static final long ALARM_DELAY = INITIAL_ALARM_DELAY;
+    private static final long INITIAL_ALARM_DELAY = 15*1000L;
+    private static final long ALARM_DELAY = AlarmManager.INTERVAL_DAY;
 
     static final  String TAG = "Lab-DailySelfie";
     static final  String pathAttribute = "final_path";

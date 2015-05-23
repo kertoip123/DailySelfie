@@ -48,7 +48,8 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
                 context)//.setTicker(tickerText)
                 .setSmallIcon(android.R.drawable.stat_sys_warning)
                 .setAutoCancel(true).setContentTitle(contentTitle)
-                .setContentText(contentText).setContentIntent(mContentIntent);
+                .setContentText(contentText).setContentIntent(mContentIntent)
+                .setSmallIcon(R.drawable.ic_action_camera);
                 //.setSound(soundURI).setVibrate(mVibratePattern);
 
         // Get the NotificationManager
