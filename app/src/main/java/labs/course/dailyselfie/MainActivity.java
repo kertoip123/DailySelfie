@@ -127,6 +127,8 @@ public class MainActivity extends ListActivity {
                 PhotoRecord currPhotoRecord = new PhotoRecord(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
                 Log.e(TAG, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString());
                 photoFile = currPhotoRecord.createImageFile();
+                if(photoFile.exists())
+                Log.e(TAG, "true");
 
                 editor.putString(nameAttribute, currPhotoRecord.getName());
                 editor.putString(pathAttribute, currPhotoRecord.getCurrentPhotoPath());
