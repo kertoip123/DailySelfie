@@ -1,11 +1,14 @@
 package labs.course.dailyselfie;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.ListActivity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
@@ -21,6 +24,12 @@ public class MainActivity extends ListActivity {
     private PhotoListAdapter mAdapter;
     private PhotoRecord currPhotoRecord;
 
+    private AlarmManager mAlarmManager;
+    private Intent mNotificationReceiverIntent;
+    private PendingIntent mNotificationReceiverPendingIntent;
+    private static final long INITIAL_ALARM_DELAY = AlarmManager.INTERVAL_DAY;
+    private static final long ALARM_DELAY = INITIAL_ALARM_DELAY;
+
     static final  String TAG = "Lab-DailySelfie";
     static final  String pathAttribute = "final_path";
     static final int REQUEST_TAKE_PHOTO = 1;
@@ -35,6 +44,18 @@ public class MainActivity extends ListActivity {
 
         mAdapter = new PhotoListAdapter(getApplicationContext());
         setListAdapter(mAdapter);
+
+        //notification
+        mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        mNotificationReceiverIntent = new Intent(MainActivity.this,
+                AlarmNotificationReceiver.class);
+
+        mNotificationReceiverPendingIntent = PendingIntent.getBroadcast(
+                MainActivity.this, 0, mNotificationReceiverIntent, 0);
+        mAlarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME,
+                SystemClock.elapsedRealtime()+INITIAL_ALARM_DELAY,
+                ALARM_DELAY,
+                mNotificationReceiverPendingIntent);
     }
 
     @Override
@@ -54,6 +75,7 @@ public class MainActivity extends ListActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_camera) {
             dispatchTakePictureIntent();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
