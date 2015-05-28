@@ -1,6 +1,7 @@
 package labs.course.dailyselfie;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -68,6 +69,16 @@ public class PhotoListAdapter extends BaseAdapter  {
 
     public void add(PhotoRecord listItem) {
         list.add(listItem);
+        notifyDataSetChanged();
+    }
+
+    public void remove(String filePath) {
+        Iterator<PhotoRecord> listIterator = list.iterator();
+        while(listIterator.hasNext() ){
+            PhotoRecord curr = listIterator.next();
+            if(curr.getCurrentPhotoPath().equals(filePath))
+                listIterator.remove();
+        }
         notifyDataSetChanged();
     }
 

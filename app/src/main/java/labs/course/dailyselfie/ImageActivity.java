@@ -85,11 +85,11 @@ public class ImageActivity extends Activity {
             Set<String> currNames = sharedPreferences.getStringSet(MainActivity.nameAttributeSet, null);
 
             for(String s : currNames) {
-                if(s != photoName)
+                if(!s.equals(photoName) )
                     names.add(s);
             }
             for(String s: currPaths) {
-                if(s != photoCurrentPath)
+                if(!s.equals(photoCurrentPath) )
                     paths.add(s);
             }
 
@@ -97,6 +97,8 @@ public class ImageActivity extends Activity {
             names.add(photoName);
             editor.putStringSet(MainActivity.pathAttributeSet, paths);
             editor.putStringSet(MainActivity.nameAttributeSet, names);
+            String pathToDelete = new String(photoCurrentPath);
+            editor.putString(MainActivity.pathAttributeToDelete, pathToDelete);
             editor.commit();
 
             File tempFile = new File(photoCurrentPath);

@@ -20,6 +20,7 @@ import android.widget.ListView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -44,6 +45,7 @@ public class MainActivity extends ListActivity {
     static final  String nameAttribute = "curr_name";
     static final  String pathAttributeSet = "final_path_set";
     static final  String nameAttributeSet = "curr_name_set";
+    static final  String pathAttributeToDelete = "final_path_to_delete";
     static final String PREF_FILE_NAME = "preferences";
     static final int REQUEST_TAKE_PHOTO = 1;
 
@@ -69,6 +71,21 @@ public class MainActivity extends ListActivity {
         mAdapter = new PhotoListAdapter(getApplicationContext());
         setListAdapter(mAdapter);
 
+        Set<String> photoNameSet = sharedPreferences.getStringSet(nameAttributeSet, null);
+        Iterator<String> photoNameIterator = photoNameSet.iterator();
+        Set<String> photoPathSet = sharedPreferences.getStringSet(pathAttributeSet, null);
+        Iterator<String> photoPathIterator = photoPathSet.iterator();
+        while(photoNameIterator.hasNext() && photoPathIterator.hasNext()){
+            String name = photoNameIterator.next();
+            String path = photoPathIterator.next();
+            if(!new File(path).exists()){
+                photoNameIterator.remove();
+                photoPathIterator.remove();
+            }
+            else
+                mAdapter.add(new PhotoRecord(name, path));
+        }
+
         //notification
         mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         mNotificationReceiverIntent = new Intent(MainActivity.this,
@@ -86,21 +103,9 @@ public class MainActivity extends ListActivity {
     protected void onResume(){
         super.onResume();
 
-        Set<String> photoNameSet = sharedPreferences.getStringSet(nameAttributeSet, null);
-        Iterator<String> photoNameIterator = photoNameSet.iterator();
-        Set<String> photoPathSet = sharedPreferences.getStringSet(pathAttributeSet, null);
-        Iterator<String> photoPathIterator = photoPathSet.iterator();
-        while(photoNameIterator.hasNext() && photoPathIterator.hasNext()){
-            String name = photoNameIterator.next();
-            String path = photoPathIterator.next();
-            if(!new File(path).exists()){
-                photoNameIterator.remove();
-                photoPathIterator.remove();
-            }
-            else
-                mAdapter.add(new PhotoRecord(name, path));
-        }
-
+        String pathToDelete = sharedPreferences.getString(pathAttributeToDelete, "No such items");
+        if(pathToDelete != "No such items")
+            mAdapter.remove(pathToDelete);
     }
 
     @Override
