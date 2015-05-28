@@ -75,13 +75,19 @@ public class PhotoRecord {
         return image;
     }
 
-    public void setPic(ImageView mImageView) {
+    public void setPic(ImageView mImageView, int tarWidth, int tarHeight) {
         // Get the dimensions of the View
         //mImageView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
 
         //Works only with fixed dps values
-        int targetW = mImageView.getLayoutParams().width;
-        int targetH = mImageView.getLayoutParams().height;
+        int targetW, targetH;
+        if(tarWidth == -1) {
+            targetW = mImageView.getLayoutParams().width;
+            targetH = mImageView.getLayoutParams().height;
+        }else {
+            targetW = tarWidth;
+            targetH = tarHeight;
+        }
 
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
