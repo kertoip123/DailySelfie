@@ -101,6 +101,7 @@ public class ImageActivity extends Activity {
 
             File tempFile = new File(photoCurrentPath);
             tempFile.delete();
+            finish();
 
         }
 

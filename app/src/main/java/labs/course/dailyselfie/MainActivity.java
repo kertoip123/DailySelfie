@@ -69,6 +69,23 @@ public class MainActivity extends ListActivity {
         mAdapter = new PhotoListAdapter(getApplicationContext());
         setListAdapter(mAdapter);
 
+        //notification
+        mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        mNotificationReceiverIntent = new Intent(MainActivity.this,
+                AlarmNotificationReceiver.class);
+
+        mNotificationReceiverPendingIntent = PendingIntent.getBroadcast(
+                MainActivity.this, 0, mNotificationReceiverIntent, 0);
+        mAlarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME,
+                SystemClock.elapsedRealtime() + INITIAL_ALARM_DELAY,
+                ALARM_DELAY,
+                mNotificationReceiverPendingIntent);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
         Set<String> photoNameSet = sharedPreferences.getStringSet(nameAttributeSet, null);
         Iterator<String> photoNameIterator = photoNameSet.iterator();
         Set<String> photoPathSet = sharedPreferences.getStringSet(pathAttributeSet, null);
@@ -84,17 +101,6 @@ public class MainActivity extends ListActivity {
                 mAdapter.add(new PhotoRecord(name, path));
         }
 
-        //notification
-        mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        mNotificationReceiverIntent = new Intent(MainActivity.this,
-                AlarmNotificationReceiver.class);
-
-        mNotificationReceiverPendingIntent = PendingIntent.getBroadcast(
-                MainActivity.this, 0, mNotificationReceiverIntent, 0);
-        mAlarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME,
-                SystemClock.elapsedRealtime() + INITIAL_ALARM_DELAY,
-                ALARM_DELAY,
-                mNotificationReceiverPendingIntent);
     }
 
     @Override
