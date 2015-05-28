@@ -20,6 +20,11 @@ import android.widget.ListView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class MainActivity extends ListActivity {
 
@@ -37,6 +42,8 @@ public class MainActivity extends ListActivity {
     static final  String TAG = "Lab-DailySelfie";
     static final  String pathAttribute = "final_path";
     static final  String nameAttribute = "curr_name";
+    static final  String pathAttributeSet = "final_path_set";
+    static final  String nameAttributeSet = "curr_name_set";
     static final int REQUEST_TAKE_PHOTO = 1;
 
 
@@ -50,8 +57,29 @@ public class MainActivity extends ListActivity {
         sharedPreferences = getPreferences(MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
+        if(sharedPreferences.getStringSet(pathAttributeSet, null)==null)
+            editor.putStringSet(pathAttributeSet, new LinkedHashSet<String>());
+        if(sharedPreferences.getStringSet(nameAttributeSet, null)==null)
+            editor.putStringSet(nameAttributeSet, new LinkedHashSet<String>());
+        editor.commit();
+
         mAdapter = new PhotoListAdapter(getApplicationContext());
         setListAdapter(mAdapter);
+
+        Set<String> photoNameSet = sharedPreferences.getStringSet(nameAttributeSet, null);
+        Iterator<String> photoNameIterator = photoNameSet.iterator();
+        Set<String> photoPathSet = sharedPreferences.getStringSet(pathAttributeSet, null);
+        Iterator<String> photoPathIterator = photoPathSet.iterator();
+        while(photoNameIterator.hasNext() && photoPathIterator.hasNext()){
+            String name = photoNameIterator.next();
+            String path = photoPathIterator.next();
+            if(!new File(path).exists()){
+                photoNameIterator.remove();
+                photoPathIterator.remove();
+            }
+            else
+                mAdapter.add(new PhotoRecord(name, path));
+        }
 
         //notification
         mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -131,7 +159,12 @@ public class MainActivity extends ListActivity {
 
                 editor.putString(nameAttribute, currPhotoRecord.getName());
                 editor.putString(pathAttribute, currPhotoRecord.getCurrentPhotoPath());
-
+                Set<String> paths = sharedPreferences.getStringSet(pathAttributeSet, null);
+                Set<String> names = sharedPreferences.getStringSet(nameAttributeSet, null);
+                paths.add(currPhotoRecord.getCurrentPhotoPath());
+                names.add(currPhotoRecord.getName());
+                editor.putStringSet(pathAttributeSet, paths);
+                editor.putStringSet(nameAttributeSet, names);
                 editor.commit();
 
             } catch (IOException ex) {
