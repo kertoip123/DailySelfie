@@ -59,8 +59,10 @@ public class MainActivity extends ListActivity {
 
         if(sharedPreferences.getStringSet(pathAttributeSet, null)==null)
             editor.putStringSet(pathAttributeSet, new LinkedHashSet<String>());
+
         if(sharedPreferences.getStringSet(nameAttributeSet, null)==null)
             editor.putStringSet(nameAttributeSet, new LinkedHashSet<String>());
+
         editor.commit();
 
         mAdapter = new PhotoListAdapter(getApplicationContext());
@@ -123,6 +125,7 @@ public class MainActivity extends ListActivity {
         PhotoRecord clickedPhoto = (PhotoRecord) getListAdapter().getItem(position);
         Intent intent = new Intent(MainActivity.this, ImageActivity.class);
         intent.putExtra(pathAttribute, clickedPhoto.getCurrentPhotoPath());
+        intent.putExtra(nameAttribute, clickedPhoto.getName());
         startActivity(intent);
     }
 
@@ -138,8 +141,18 @@ public class MainActivity extends ListActivity {
                 String mCurrentPhotoPath = sharedPreferences.getString(pathAttribute, "No such items");
                 PhotoRecord currPhotoRecord = new PhotoRecord(mName, mCurrentPhotoPath);
                 mAdapter.add(currPhotoRecord);
-                Set<String> paths = sharedPreferences.getStringSet(pathAttributeSet, null);
-                Set<String> names = sharedPreferences.getStringSet(nameAttributeSet, null);
+
+                Set<String> paths = new LinkedHashSet<String>();
+                Set<String> names = new LinkedHashSet<String>();
+
+                Set<String> currPaths = sharedPreferences.getStringSet(pathAttributeSet, null);
+                Set<String> currNames = sharedPreferences.getStringSet(nameAttributeSet, null);
+
+                for(String s : currNames)
+                    names.add(s);
+                for(String s: currPaths)
+                    paths.add(s);
+
                 paths.add(mCurrentPhotoPath);
                 names.add(mName);
                 editor.putStringSet(pathAttributeSet, paths);
