@@ -138,6 +138,13 @@ public class MainActivity extends ListActivity {
                 String mCurrentPhotoPath = sharedPreferences.getString(pathAttribute, "No such items");
                 PhotoRecord currPhotoRecord = new PhotoRecord(mName, mCurrentPhotoPath);
                 mAdapter.add(currPhotoRecord);
+                Set<String> paths = sharedPreferences.getStringSet(pathAttributeSet, null);
+                Set<String> names = sharedPreferences.getStringSet(nameAttributeSet, null);
+                paths.add(mCurrentPhotoPath);
+                names.add(mName);
+                editor.putStringSet(pathAttributeSet, paths);
+                editor.putStringSet(nameAttributeSet, names);
+                editor.commit();
                 // Do something with the contact here (bigger example below)
             }else {
                 String mCurrentPhotoPath = sharedPreferences.getString(pathAttribute, "No such items");
@@ -159,16 +166,11 @@ public class MainActivity extends ListActivity {
                 Log.e(TAG, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString());
                 photoFile = currPhotoRecord.createImageFile();
                // if(photoFile.exists())
-                 //   Log.e(TAG, "true");
+               //   Log.e(TAG, "true");
 
                 editor.putString(nameAttribute, currPhotoRecord.getName());
                 editor.putString(pathAttribute, currPhotoRecord.getCurrentPhotoPath());
-                Set<String> paths = sharedPreferences.getStringSet(pathAttributeSet, null);
-                Set<String> names = sharedPreferences.getStringSet(nameAttributeSet, null);
-                paths.add(currPhotoRecord.getCurrentPhotoPath());
-                names.add(currPhotoRecord.getName());
-                editor.putStringSet(pathAttributeSet, paths);
-                editor.putStringSet(nameAttributeSet, names);
+
                 editor.commit();
 
             } catch (IOException ex) {
