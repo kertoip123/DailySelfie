@@ -111,6 +111,10 @@ public class MainActivity extends ListActivity {
                 PhotoRecord currPhotoRecord = new PhotoRecord(mName, mCurrentPhotoPath);
                 mAdapter.add(currPhotoRecord);
                 // Do something with the contact here (bigger example below)
+            }else {
+                String mCurrentPhotoPath = sharedPreferences.getString(pathAttribute, "No such items");
+                File emptyImage = new File(mCurrentPhotoPath);
+                emptyImage.delete();
             }
         }
     }

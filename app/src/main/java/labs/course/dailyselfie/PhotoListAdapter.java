@@ -53,7 +53,7 @@ public class PhotoListAdapter extends BaseAdapter  {
         }
 
         //holder.photo.setImageBitmap(curr.getBitmap());
-        curr.setPic(holder.photo);
+        curr.setPic(holder.photo, -1, -1);
         holder.name.setText(curr.getName());
 
         return newView;
