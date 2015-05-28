@@ -44,6 +44,7 @@ public class MainActivity extends ListActivity {
     static final  String nameAttribute = "curr_name";
     static final  String pathAttributeSet = "final_path_set";
     static final  String nameAttributeSet = "curr_name_set";
+    static final String PREF_FILE_NAME = "preferences";
     static final int REQUEST_TAKE_PHOTO = 1;
 
 
@@ -54,7 +55,7 @@ public class MainActivity extends ListActivity {
 
         ListView photosListView = getListView();
 
-        sharedPreferences = getPreferences(MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(PREF_FILE_NAME, MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
         if(sharedPreferences.getStringSet(pathAttributeSet, null)==null)

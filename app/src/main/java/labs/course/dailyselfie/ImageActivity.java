@@ -75,7 +75,7 @@ public class ImageActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.delete) {
-            SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.PREF_FILE_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
 
             Set<String> paths = new LinkedHashSet<String>();
